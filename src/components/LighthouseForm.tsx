@@ -12,6 +12,7 @@ const initialForm = {
   team: "",
   platform: "desktop" as ReportPlatform,
   performance: "",
+  fcp: "",
   lcp: "",
   inp: "",
   cls: "",
@@ -94,7 +95,7 @@ export function LighthouseForm() {
           Lighthouse Scores
         </h2>
         <p className="mb-4 text-sm text-slate-500">
-          Score fields accept 0–100. Core Web Vitals use their raw units (LCP in seconds, INP in ms, CLS as decimal).
+          Score fields accept 0–100. Vitals use raw units (FCP/LCP in seconds, INP in ms, CLS as decimal).
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Field label="Performance" name="performance" type="number" min={0} max={100} value={form.performance} onChange={handleChange} required />
@@ -108,7 +109,8 @@ export function LighthouseForm() {
         <h2 className="mb-4 text-lg font-semibold text-slate-800">
           Core Web Vitals
         </h2>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <Field label="First Contentful Paint (s)" name="fcp" type="number" step="0.01" min={0} value={form.fcp} onChange={handleChange} required />
           <Field label="Largest Contentful Paint (s)" name="lcp" type="number" step="0.01" min={0} value={form.lcp} onChange={handleChange} required />
           <Field label="Interaction to Next Paint (ms)" name="inp" type="number" step="1" min={0} value={form.inp} onChange={handleChange} required />
           <Field label="Cumulative Layout Shift" name="cls" type="number" step="0.001" min={0} value={form.cls} onChange={handleChange} required />

@@ -91,6 +91,7 @@ export async function POST(request: NextRequest) {
     }
 
     const performance = parseScore(body.performance, "Performance");
+    const fcp = parseNumber(body.fcp, "First Contentful Paint");
     const lcp = parseNumber(body.lcp, "Largest Contentful Paint");
     const inp = parseNumber(body.inp, "Interaction to Next Paint");
     const cls = parseNumber(body.cls, "Cumulative Layout Shift");
@@ -104,6 +105,7 @@ export async function POST(request: NextRequest) {
       team: team.trim(),
       platform,
       performance,
+      fcp,
       lcp,
       inp,
       cls,

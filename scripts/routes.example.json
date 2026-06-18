@@ -1,0 +1,28 @@
+{
+  "baseUrl": "https://www.tiket.com",
+  "output": "scripts/reports.json",
+  "routes": [
+    { "route": "/en-us", "team": "Platform" },
+    { "route": "/en-us/hotel", "team": "Hotel" },
+    { "route": "/en-us/flights", "team": "Flight" },
+    { "route": "/en-us/flights/maskapai", "team": "Flight" },
+    { "route": "/en-us/flights/rute", "team": "Flight" },
+    { "route": "/en-us/flights/search?d=JKTC&a=JOGC", "team": "Flight" },
+    { "route": "/en-us/stories", "team": "Gamification" },
+    { "route": "/en-us/blibli-affiliate", "team": "Gamification" },
+    { "route": "/en-us/rewards", "team": "Platform" },
+    { "route": "/en-us/mission", "team": "Platform" },
+    { "route": "/en-us/myreview", "team": "Platform" },
+    { "route": "/en-us/help-center", "team": "Platform" },
+    { "route": "/en-us/myaccount", "team": "Platform" },
+    { "route": "/en-us/wishlist", "team": "Platform" },
+    { "route": "/en-us/yourorder", "team": "Platform" },
+    { "route": "/en-us/hotel/indonesia/kimaya-slipi-jakarta-by-harris-411001637319693681", "team": "Hotel" },
+    { "route": "/en-us/to-do", "team": "TODO" },
+    { "route": "/en-us/kereta-api", "team": "Train" },
+    { "route": "https://payment.tiket.com", "team": "Payment" },
+    { "route": "/en-us/explore/todo-multi-inventory-pass", "team": "Platform" },
+    { "route": "/en-us/to-do/search?publicId=jakarta&publicIds=jakarta", "team": "TODO" },
+    { "route": "/en-us/to-do/activity-taman-safari-indonesia-bogor", "team": "TODO" }
+  ]
+}

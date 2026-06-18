@@ -1,0 +1,54 @@
+[
+  {
+    "route": "/home",
+    "team": "Platform",
+    "mobile": {
+      "performance": 72,
+      "fcp": 2.1,
+      "lcp": 3.2,
+      "inp": 210,
+      "cls": 0.08,
+      "accessibility": 94,
+      "bestPractices": 88,
+      "seo": 100,
+      "lowScoreReasons": "Large hero image\nRender-blocking CSS"
+    },
+    "desktop": {
+      "performance": 89,
+      "fcp": 1.2,
+      "lcp": 1.8,
+      "inp": 95,
+      "cls": 0.03,
+      "accessibility": 96,
+      "bestPractices": 92,
+      "seo": 100,
+      "lowScoreReasons": ""
+    }
+  },
+  {
+    "route": "/search",
+    "team": "Discovery",
+    "mobile": {
+      "performance": 65,
+      "fcp": 2.8,
+      "lcp": 4.1,
+      "inp": 280,
+      "cls": 0.12,
+      "accessibility": 91,
+      "bestPractices": 85,
+      "seo": 98,
+      "lowScoreReasons": "Third-party scripts\nUnused JavaScript"
+    },
+    "desktop": {
+      "performance": 84,
+      "fcp": 1.5,
+      "lcp": 2.1,
+      "inp": 110,
+      "cls": 0.05,
+      "accessibility": 93,
+      "bestPractices": 90,
+      "seo": 98,
+      "lowScoreReasons": "Third-party scripts"
+    }
+  }
+]

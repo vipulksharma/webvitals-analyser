@@ -8,6 +8,7 @@ export interface ILighthouseReport {
   team: string;
   platform: ReportPlatform;
   performance: number;
+  fcp: number;
   lcp: number;
   inp: number;
   cls: number;
@@ -31,6 +32,7 @@ const LighthouseReportSchema = new Schema<ILighthouseReport>(
       enum: REPORT_PLATFORMS,
     },
     performance: { type: Number, required: true, min: 0, max: 100 },
+    fcp: { type: Number, min: 0 },
     lcp: { type: Number, required: true, min: 0 },
     inp: { type: Number, required: true, min: 0 },
     cls: { type: Number, required: true, min: 0 },
@@ -54,6 +56,7 @@ export interface LighthouseReportResponse {
   team: string;
   platform: ReportPlatform;
   performance: number;
+  fcp: number;
   lcp: number;
   inp: number;
   cls: number;
@@ -74,6 +77,7 @@ export function toReportResponse(doc: ReportSource): LighthouseReportResponse {
     team: doc.team,
     platform: doc.platform ?? "desktop",
     performance: doc.performance,
+    fcp: doc.fcp ?? 0,
     lcp: doc.lcp,
     inp: doc.inp,
     cls: doc.cls,

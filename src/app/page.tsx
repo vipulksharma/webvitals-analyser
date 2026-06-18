@@ -1,17 +1,17 @@
-import { LighthouseForm } from "@/components/LighthouseForm";
+import { DashboardCharts } from "@/components/DashboardCharts";
 
 export default function HomePage() {
   return (
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900">
-          Submit Lighthouse Report
+          Lighthouse Dashboard
         </h1>
         <p className="mt-2 text-slate-600">
-          Record performance metrics and Core Web Vitals for any route.
+          Visualize performance trends, Core Web Vitals, and team averages from stored reports.
         </p>
       </div>
-      <LighthouseForm />
+      <DashboardCharts />
     </div>
   );
 }
