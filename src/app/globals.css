@@ -3,9 +3,75 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-tiket-bg text-tiket-text antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 123, 255, 0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(255, 104, 25, 0.06), transparent);
+    background-attachment: fixed;
+  }
+
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+
+  ::selection {
+    @apply bg-tiket-blue/30 text-tiket-text;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-tiket-border bg-tiket-card shadow-tiket;
+    background-image: linear-gradient(
+      135deg,
+      rgba(0, 123, 255, 0.04) 0%,
+      transparent 50%,
+      rgba(255, 104, 25, 0.02) 100%
+    );
+  }
+
+  .panel-header {
+    @apply border-b border-tiket-border px-5 py-4;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-tiket-border bg-tiket-surface px-3 py-2.5 text-sm text-tiket-text shadow-sm transition placeholder:text-tiket-muted focus:border-tiket-blue focus:outline-none focus:ring-2 focus:ring-tiket-blue/25;
+  }
+
+  .btn-secondary {
+    @apply rounded-xl border border-tiket-border bg-tiket-surface px-4 py-2.5 text-sm font-medium text-tiket-text transition hover:border-tiket-blue/40 hover:bg-tiket-card-hover focus:outline-none focus:ring-2 focus:ring-tiket-blue/30;
+  }
+
+  .btn-tiket {
+    @apply rounded-xl bg-tiket-blue px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-tiket-blue-dark focus:outline-none focus:ring-2 focus:ring-tiket-blue/40;
+  }
+
+  .badge-tiket {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .skeleton {
+    @apply rounded-xl bg-tiket-border/40;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 123, 255, 0.08),
+      transparent
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
   }
 }

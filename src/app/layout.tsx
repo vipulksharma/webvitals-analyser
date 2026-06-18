@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/Nav";
 
 export const metadata: Metadata = {
-  title: "Lighthouse EagleEye",
-  description: "Track and visualize Lighthouse performance reports",
+  title: "EagleEye — Web Vitals Analytics",
+  description: "Track Lighthouse scores and Core Web Vitals over time",
 };
 
 export default function RootLayout({
@@ -13,10 +13,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
+    <html lang="en" className="dark">
+      <body>
         <Nav />
-        <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+          {children}
+        </main>
       </body>
     </html>
   );

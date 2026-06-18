@@ -61,15 +61,15 @@ export function LighthouseForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-slate-800">
+      <section className="panel p-6">
+        <h2 className="mb-4 text-lg font-semibold text-tiket-text">
           Route & Team
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Field label="Route" name="route" value={form.route} onChange={handleChange} placeholder="/home" required />
           <Field label="Team" name="team" value={form.team} onChange={handleChange} placeholder="Platform" required />
           <div>
-            <label htmlFor="platform" className="mb-1 block text-sm font-medium text-slate-700">
+            <label htmlFor="platform" className="mb-1 block text-sm font-medium text-tiket-text">
               Report For
             </label>
             <select
@@ -78,7 +78,7 @@ export function LighthouseForm() {
               value={form.platform}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+              className="input-field"
             >
               {REPORT_PLATFORMS.map((platform) => (
                 <option key={platform} value={platform}>
@@ -90,11 +90,11 @@ export function LighthouseForm() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-slate-800">
+      <section className="panel p-6">
+        <h2 className="mb-4 text-lg font-semibold text-tiket-text">
           Lighthouse Scores
         </h2>
-        <p className="mb-4 text-sm text-slate-500">
+        <p className="mb-4 text-sm text-tiket-muted">
           Score fields accept 0–100. Vitals use raw units (FCP/LCP in seconds, INP in ms, CLS as decimal).
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -105,8 +105,8 @@ export function LighthouseForm() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-slate-800">
+      <section className="panel p-6">
+        <h2 className="mb-4 text-lg font-semibold text-tiket-text">
           Core Web Vitals
         </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -117,12 +117,12 @@ export function LighthouseForm() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-slate-800">
+      <section className="panel p-6">
+        <h2 className="mb-4 text-lg font-semibold text-tiket-text">
           Notes
         </h2>
         <div>
-          <label htmlFor="lowScoreReasons" className="mb-1 block text-sm font-medium text-slate-700">
+          <label htmlFor="lowScoreReasons" className="mb-1 block text-sm font-medium text-tiket-text">
             Reason for Low Score (one point per line)
           </label>
           <textarea
@@ -132,7 +132,7 @@ export function LighthouseForm() {
             value={form.lowScoreReasons}
             onChange={handleChange}
             placeholder={"Large images not optimized\nRender-blocking scripts\nMissing alt text on images"}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="input-field"
           />
         </div>
       </section>
@@ -141,8 +141,8 @@ export function LighthouseForm() {
         <div
           className={`rounded-lg px-4 py-3 text-sm ${
             status === "success"
-              ? "bg-green-50 text-green-800"
-              : "bg-red-50 text-red-800"
+              ? "bg-tiket-green/10 text-tiket-green"
+              : "bg-tiket-red/10 text-tiket-red"
           }`}
         >
           {message}
@@ -152,7 +152,7 @@ export function LighthouseForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="btn-tiket w-full sm:w-auto disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "loading" ? "Saving…" : "Save Report"}
       </button>
@@ -185,7 +185,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="mb-1 block text-sm font-medium text-slate-700">
+      <label htmlFor={name} className="mb-1 block text-sm font-medium text-tiket-text">
         {label}
       </label>
       <input
@@ -199,7 +199,7 @@ function Field({
         min={min}
         max={max}
         step={step}
-        className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+        className="input-field"
       />
     </div>
   );
