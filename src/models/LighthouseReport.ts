@@ -14,8 +14,6 @@ export interface ILighthouseReport {
   accessibility: number;
   bestPractices: number;
   seo: number;
-  screenshot?: string;
-  screenshotMimeType?: string;
   lowScoreReasons: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -39,8 +37,6 @@ const LighthouseReportSchema = new Schema<ILighthouseReport>(
     accessibility: { type: Number, required: true, min: 0, max: 100 },
     bestPractices: { type: Number, required: true, min: 0, max: 100 },
     seo: { type: Number, required: true, min: 0, max: 100 },
-    screenshot: { type: String },
-    screenshotMimeType: { type: String },
     lowScoreReasons: { type: [String], default: [] },
   },
   { timestamps: true }
@@ -64,8 +60,6 @@ export interface LighthouseReportResponse {
   accessibility: number;
   bestPractices: number;
   seo: number;
-  screenshot?: string;
-  screenshotMimeType?: string;
   lowScoreReasons: string[];
   createdAt: string;
   updatedAt: string;
@@ -86,8 +80,6 @@ export function toReportResponse(doc: ReportSource): LighthouseReportResponse {
     accessibility: doc.accessibility,
     bestPractices: doc.bestPractices,
     seo: doc.seo,
-    screenshot: doc.screenshot,
-    screenshotMimeType: doc.screenshotMimeType,
     lowScoreReasons: doc.lowScoreReasons,
     createdAt: doc.createdAt.toISOString(),
     updatedAt: doc.updatedAt.toISOString(),

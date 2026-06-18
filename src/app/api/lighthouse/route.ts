@@ -8,17 +8,15 @@ import {
 
 export const runtime = "nodejs";
 
-const MAX_SCREENSHOT_BYTES = 4 * 1024 * 1024; // 4 MB
-
-function parseNumber(value: FormDataEntryValue | null, field: string): number {
+function parseNumber(value: unknown, field: string): number {
   const num = Number(value);
-  if (value === null || value === "" || Number.isNaN(num)) {
+  if (value === null || value === undefined || value === "" || Number.isNaN(num)) {
     throw new Error(`${field} must be a valid number`);
   }
   return num;
 }
 
-function parseScore(value: FormDataEntryValue | null, field: string): number {
+function parseScore(value: unknown, field: string): number {
   const num = parseNumber(value, field);
   if (num < 0 || num > 100) {
     throw new Error(`${field} must be between 0 and 100`);
@@ -26,7 +24,7 @@ function parseScore(value: FormDataEntryValue | null, field: string): number {
   return num;
 }
 
-function parseReasons(value: FormDataEntryValue | null): string[] {
+function parseReasons(value: unknown): string[] {
   if (!value || typeof value !== "string") return [];
   return value
     .split("\n")
@@ -73,11 +71,11 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    const formData = await request.formData();
+    const body = await request.json();
 
-    const route = formData.get("route");
-    const team = formData.get("team");
-    const platform = formData.get("platform");
+    const route = body.route;
+    const team = body.team;
+    const platform = body.platform;
 
     if (!route || typeof route !== "string" || !route.trim()) {
       return NextResponse.json({ error: "Route is required" }, { status: 400 });
@@ -92,36 +90,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const performance = parseScore(formData.get("performance"), "Performance");
-    const lcp = parseNumber(formData.get("lcp"), "Largest Contentful Paint");
-    const inp = parseNumber(formData.get("inp"), "Interaction to Next Paint");
-    const cls = parseNumber(formData.get("cls"), "Cumulative Layout Shift");
-    const accessibility = parseScore(formData.get("accessibility"), "Accessibility");
-    const bestPractices = parseScore(formData.get("bestPractices"), "Best Practices");
-    const seo = parseScore(formData.get("seo"), "SEO");
-    const lowScoreReasons = parseReasons(formData.get("lowScoreReasons"));
-
-    let screenshot: string | undefined;
-    let screenshotMimeType: string | undefined;
-
-    const screenshotFile = formData.get("screenshot");
-    if (screenshotFile instanceof File && screenshotFile.size > 0) {
-      if (!screenshotFile.type.startsWith("image/")) {
-        return NextResponse.json(
-          { error: "Screenshot must be an image file" },
-          { status: 400 }
-        );
-      }
-      if (screenshotFile.size > MAX_SCREENSHOT_BYTES) {
-        return NextResponse.json(
-          { error: "Screenshot must be smaller than 4 MB" },
-          { status: 400 }
-        );
-      }
-      const buffer = Buffer.from(await screenshotFile.arrayBuffer());
-      screenshot = buffer.toString("base64");
-      screenshotMimeType = screenshotFile.type;
-    }
+    const performance = parseScore(body.performance, "Performance");
+    const lcp = parseNumber(body.lcp, "Largest Contentful Paint");
+    const inp = parseNumber(body.inp, "Interaction to Next Paint");
+    const cls = parseNumber(body.cls, "Cumulative Layout Shift");
+    const accessibility = parseScore(body.accessibility, "Accessibility");
+    const bestPractices = parseScore(body.bestPractices, "Best Practices");
+    const seo = parseScore(body.seo, "SEO");
+    const lowScoreReasons = parseReasons(body.lowScoreReasons);
 
     const report = await LighthouseReport.create({
       route: route.trim(),
@@ -134,8 +110,6 @@ export async function POST(request: NextRequest) {
       accessibility,
       bestPractices,
       seo,
-      screenshot,
-      screenshotMimeType,
       lowScoreReasons,
     });
 

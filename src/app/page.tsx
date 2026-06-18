@@ -8,7 +8,7 @@ export default function HomePage() {
           Submit Lighthouse Report
         </h1>
         <p className="mt-2 text-slate-600">
-          Record performance metrics, Core Web Vitals, and screenshots for any route.
+          Record performance metrics and Core Web Vitals for any route.
         </p>
       </div>
       <LighthouseForm />

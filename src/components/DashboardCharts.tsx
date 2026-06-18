@@ -237,7 +237,6 @@ export function DashboardCharts() {
                     <th className="px-4 py-3">BP</th>
                     <th className="px-4 py-3">SEO</th>
                     <th className="px-4 py-3">Reasons</th>
-                    <th className="px-4 py-3">Screenshot</th>
                     <th className="px-4 py-3">Date</th>
                   </tr>
                 </thead>
@@ -265,18 +264,6 @@ export function DashboardCharts() {
                               <li key={reason}>{reason}</li>
                             ))}
                           </ul>
-                        ) : (
-                          <span className="text-slate-400">—</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        {r.screenshot && r.screenshotMimeType ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={`data:${r.screenshotMimeType};base64,${r.screenshot}`}
-                            alt={`Screenshot for ${r.route}`}
-                            className="h-12 w-20 rounded border border-slate-200 object-cover"
-                          />
                         ) : (
                           <span className="text-slate-400">—</span>
                         )}

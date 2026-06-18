@@ -23,8 +23,6 @@ const initialForm = {
 
 export function LighthouseForm() {
   const [form, setForm] = useState(initialForm);
-  const [screenshot, setScreenshot] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -34,26 +32,16 @@ export function LighthouseForm() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0] ?? null;
-    setScreenshot(file);
-    if (preview) URL.revokeObjectURL(preview);
-    setPreview(file ? URL.createObjectURL(file) : null);
-  }
-
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setStatus("loading");
     setMessage("");
 
-    const body = new FormData();
-    Object.entries(form).forEach(([key, value]) => body.append(key, value));
-    if (screenshot) body.append("screenshot", screenshot);
-
     try {
       const res = await fetch("/api/lighthouse", {
         method: "POST",
-        body,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       });
       const json = await res.json();
 
@@ -64,9 +52,6 @@ export function LighthouseForm() {
       setStatus("success");
       setMessage("Report saved successfully.");
       setForm(initialForm);
-      setScreenshot(null);
-      if (preview) URL.revokeObjectURL(preview);
-      setPreview(null);
     } catch (err) {
       setStatus("error");
       setMessage(err instanceof Error ? err.message : "Something went wrong");
@@ -132,42 +117,21 @@ export function LighthouseForm() {
 
       <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-slate-800">
-          Screenshot & Notes
+          Notes
         </h2>
-        <div className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
-              Lighthouse Screenshot
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="block w-full text-sm text-slate-600 file:mr-4 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-brand-700 hover:file:bg-brand-100"
-            />
-            {preview && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={preview}
-                alt="Screenshot preview"
-                className="mt-3 max-h-48 rounded-lg border border-slate-200 object-contain"
-              />
-            )}
-          </div>
-          <div>
-            <label htmlFor="lowScoreReasons" className="mb-1 block text-sm font-medium text-slate-700">
-              Reason for Low Score (one point per line)
-            </label>
-            <textarea
-              id="lowScoreReasons"
-              name="lowScoreReasons"
-              rows={4}
-              value={form.lowScoreReasons}
-              onChange={handleChange}
-              placeholder={"Large images not optimized\nRender-blocking scripts\nMissing alt text on images"}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-            />
-          </div>
+        <div>
+          <label htmlFor="lowScoreReasons" className="mb-1 block text-sm font-medium text-slate-700">
+            Reason for Low Score (one point per line)
+          </label>
+          <textarea
+            id="lowScoreReasons"
+            name="lowScoreReasons"
+            rows={4}
+            value={form.lowScoreReasons}
+            onChange={handleChange}
+            placeholder={"Large images not optimized\nRender-blocking scripts\nMissing alt text on images"}
+            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+          />
         </div>
       </section>
 
