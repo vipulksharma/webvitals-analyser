@@ -1,0 +1,17 @@
+import { LighthouseForm } from "@/components/LighthouseForm";
+
+export default function HomePage() {
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-slate-900">
+          Submit Lighthouse Report
+        </h1>
+        <p className="mt-2 text-slate-600">
+          Record performance metrics, Core Web Vitals, and screenshots for any route.
+        </p>
+      </div>
+      <LighthouseForm />
+    </div>
+  );
+}
