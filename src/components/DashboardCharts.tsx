@@ -203,7 +203,13 @@ export function DashboardCharts() {
 
   const vitalsChartData = useMemo(() => {
     if (!vitalsChartRoute || !vitalsChartPlatform) return [];
-    return buildRouteSeries(allReports, vitalsChartRoute, vitalsChartPlatform);
+    return buildRouteSeries(allReports, vitalsChartRoute, vitalsChartPlatform).map(
+      (point) => ({
+        ...point,
+        FCP: Math.round(point.FCP * 1000),
+        LCP: Math.round(point.LCP * 1000),
+      })
+    );
   }, [allReports, vitalsChartRoute, vitalsChartPlatform]);
 
   const teamAverages = useMemo(() => {
@@ -353,7 +359,7 @@ export function DashboardCharts() {
             {vitalsChartRoute ? (
               <>
                 <p className="mb-4 text-xs text-slate-500">
-                  {vitalsChartRoute} · {formatPlatform(vitalsChartPlatform)} — FCP and LCP in seconds, INP in ms, CLS as decimal
+                  {vitalsChartRoute} · {formatPlatform(vitalsChartPlatform)} — FCP, LCP, and INP in ms; CLS as decimal
                 </p>
                 {vitalsChartData.length === 0 ? (
                   <p className="py-12 text-center text-sm text-slate-500">
@@ -367,8 +373,9 @@ export function DashboardCharts() {
                       <YAxis tick={{ fontSize: 12 }} />
                       <Tooltip
                         formatter={(value, name) => {
-                          if (name === "FCP" || name === "LCP") return [`${value}s`, name];
-                          if (name === "INP") return [`${value}ms`, name];
+                          if (name === "FCP" || name === "LCP" || name === "INP") {
+                            return [`${value}ms`, name];
+                          }
                           return [value, name];
                         }}
                         labelFormatter={(label, payload) => {
