@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
+import { isReportPlatform } from "@/lib/platforms";
 import {
   LighthouseReport,
   toReportResponse,
@@ -40,10 +41,12 @@ export async function GET(request: NextRequest) {
     const { searchParams } = request.nextUrl;
     const team = searchParams.get("team");
     const route = searchParams.get("route");
+    const platform = searchParams.get("platform");
 
     const filter: Record<string, string> = {};
     if (team) filter.team = team;
     if (route) filter.route = route;
+    if (platform) filter.platform = platform;
 
     const reports = await LighthouseReport.find(filter)
       .sort({ createdAt: -1 })
@@ -54,8 +57,9 @@ export async function GET(request: NextRequest) {
 
     const teams = await LighthouseReport.distinct("team");
     const routes = await LighthouseReport.distinct("route");
+    const platforms = await LighthouseReport.distinct("platform");
 
-    return NextResponse.json({ data, teams, routes });
+    return NextResponse.json({ data, teams, routes, platforms });
   } catch (error) {
     console.error("GET /api/lighthouse error:", error);
     return NextResponse.json(
@@ -73,12 +77,19 @@ export async function POST(request: NextRequest) {
 
     const route = formData.get("route");
     const team = formData.get("team");
+    const platform = formData.get("platform");
 
     if (!route || typeof route !== "string" || !route.trim()) {
       return NextResponse.json({ error: "Route is required" }, { status: 400 });
     }
     if (!team || typeof team !== "string" || !team.trim()) {
       return NextResponse.json({ error: "Team is required" }, { status: 400 });
+    }
+    if (!platform || typeof platform !== "string" || !isReportPlatform(platform)) {
+      return NextResponse.json(
+        { error: "Platform is required (mobile, desktop, webview-android, webview-ios)" },
+        { status: 400 }
+      );
     }
 
     const performance = parseScore(formData.get("performance"), "Performance");
@@ -115,6 +126,7 @@ export async function POST(request: NextRequest) {
     const report = await LighthouseReport.create({
       route: route.trim(),
       team: team.trim(),
+      platform,
       performance,
       lcp,
       inp,

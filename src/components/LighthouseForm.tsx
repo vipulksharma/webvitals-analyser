@@ -1,10 +1,16 @@
 "use client";
 
 import { useState, FormEvent, ChangeEvent } from "react";
+import {
+  REPORT_PLATFORMS,
+  REPORT_PLATFORM_LABELS,
+  type ReportPlatform,
+} from "@/lib/platforms";
 
 const initialForm = {
   route: "",
   team: "",
+  platform: "desktop" as ReportPlatform,
   performance: "",
   lcp: "",
   inp: "",
@@ -23,7 +29,7 @@ export function LighthouseForm() {
   const [message, setMessage] = useState("");
 
   function handleChange(
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
@@ -73,9 +79,28 @@ export function LighthouseForm() {
         <h2 className="mb-4 text-lg font-semibold text-slate-800">
           Route & Team
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Field label="Route" name="route" value={form.route} onChange={handleChange} placeholder="/home" required />
           <Field label="Team" name="team" value={form.team} onChange={handleChange} placeholder="Platform" required />
+          <div>
+            <label htmlFor="platform" className="mb-1 block text-sm font-medium text-slate-700">
+              Report For
+            </label>
+            <select
+              id="platform"
+              name="platform"
+              value={form.platform}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            >
+              {REPORT_PLATFORMS.map((platform) => (
+                <option key={platform} value={platform}>
+                  {REPORT_PLATFORM_LABELS[platform]}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </section>
 

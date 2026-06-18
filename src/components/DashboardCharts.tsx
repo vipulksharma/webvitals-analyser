@@ -14,11 +14,13 @@ import {
   YAxis,
 } from "recharts";
 import type { LighthouseReportResponse } from "@/models/LighthouseReport";
+import { formatPlatform } from "@/lib/platforms";
 
 type ApiResponse = {
   data: LighthouseReportResponse[];
   teams: string[];
   routes: string[];
+  platforms: string[];
 };
 
 function scoreColor(score: number) {
@@ -31,8 +33,10 @@ export function DashboardCharts() {
   const [reports, setReports] = useState<LighthouseReportResponse[]>([]);
   const [teams, setTeams] = useState<string[]>([]);
   const [routes, setRoutes] = useState<string[]>([]);
+  const [platforms, setPlatforms] = useState<string[]>([]);
   const [teamFilter, setTeamFilter] = useState("");
   const [routeFilter, setRouteFilter] = useState("");
+  const [platformFilter, setPlatformFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -43,6 +47,7 @@ export function DashboardCharts() {
       const params = new URLSearchParams();
       if (teamFilter) params.set("team", teamFilter);
       if (routeFilter) params.set("route", routeFilter);
+      if (platformFilter) params.set("platform", platformFilter);
 
       const res = await fetch(`/api/lighthouse?${params.toString()}`);
       const json: ApiResponse = await res.json();
@@ -51,12 +56,13 @@ export function DashboardCharts() {
       setReports(json.data);
       setTeams(json.teams);
       setRoutes(json.routes);
+      setPlatforms(json.platforms);
     } catch {
       setError("Could not load lighthouse reports. Check your MongoDB connection.");
     } finally {
       setLoading(false);
     }
-  }, [teamFilter, routeFilter]);
+  }, [teamFilter, routeFilter, platformFilter]);
 
   useEffect(() => {
     fetchReports();
@@ -66,8 +72,9 @@ export function DashboardCharts() {
     return [...reports]
       .reverse()
       .map((r) => ({
-        label: `${r.route} (${new Date(r.createdAt).toLocaleDateString()})`,
+        label: `${r.route} · ${formatPlatform(r.platform)} (${new Date(r.createdAt).toLocaleDateString()})`,
         route: r.route,
+        platform: formatPlatform(r.platform),
         Performance: r.performance,
         Accessibility: r.accessibility,
         "Best Practices": r.bestPractices,
@@ -79,7 +86,7 @@ export function DashboardCharts() {
     return [...reports]
       .reverse()
       .map((r) => ({
-        label: r.route,
+        label: `${r.route} · ${formatPlatform(r.platform)}`,
         LCP: r.lcp,
         INP: r.inp,
         CLS: r.cls * 100,
@@ -135,11 +142,18 @@ export function DashboardCharts() {
           options={routes}
           onChange={setRouteFilter}
         />
+        <FilterSelect
+          label="Platform"
+          value={platformFilter}
+          options={platforms.map((p) => ({ value: p, label: formatPlatform(p) }))}
+          onChange={setPlatformFilter}
+        />
         <button
           type="button"
           onClick={() => {
             setTeamFilter("");
             setRouteFilter("");
+            setPlatformFilter("");
           }}
           className="self-end rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"
         >
@@ -214,6 +228,7 @@ export function DashboardCharts() {
                   <tr>
                     <th className="px-4 py-3">Route</th>
                     <th className="px-4 py-3">Team</th>
+                    <th className="px-4 py-3">Platform</th>
                     <th className="px-4 py-3">Perf</th>
                     <th className="px-4 py-3">LCP</th>
                     <th className="px-4 py-3">INP</th>
@@ -231,6 +246,11 @@ export function DashboardCharts() {
                     <tr key={r._id} className="hover:bg-slate-50">
                       <td className="px-4 py-3 font-medium">{r.route}</td>
                       <td className="px-4 py-3">{r.team}</td>
+                      <td className="px-4 py-3">
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
+                          {formatPlatform(r.platform)}
+                        </span>
+                      </td>
                       <td className={`px-4 py-3 font-semibold ${scoreColor(r.performance)}`}>{r.performance}</td>
                       <td className="px-4 py-3">{r.lcp}s</td>
                       <td className="px-4 py-3">{r.inp}ms</td>
@@ -299,9 +319,13 @@ function FilterSelect({
 }: {
   label: string;
   value: string;
-  options: string[];
+  options: string[] | { value: string; label: string }[];
   onChange: (v: string) => void;
 }) {
+  const normalized = options.map((opt) =>
+    typeof opt === "string" ? { value: opt, label: opt } : opt
+  );
+
   return (
     <div>
       <label className="mb-1 block text-xs font-medium uppercase text-slate-500">
@@ -313,9 +337,9 @@ function FilterSelect({
         className="rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
       >
         <option value="">All</option>
-        {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
+        {normalized.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
           </option>
         ))}
       </select>

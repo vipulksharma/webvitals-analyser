@@ -1,8 +1,12 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
+import { REPORT_PLATFORMS, type ReportPlatform } from "@/lib/platforms";
+
+export type { ReportPlatform };
 
 export interface ILighthouseReport {
   route: string;
   team: string;
+  platform: ReportPlatform;
   performance: number;
   lcp: number;
   inp: number;
@@ -23,6 +27,11 @@ const LighthouseReportSchema = new Schema<ILighthouseReport>(
   {
     route: { type: String, required: true, trim: true },
     team: { type: String, required: true, trim: true },
+    platform: {
+      type: String,
+      required: true,
+      enum: REPORT_PLATFORMS,
+    },
     performance: { type: Number, required: true, min: 0, max: 100 },
     lcp: { type: Number, required: true, min: 0 },
     inp: { type: Number, required: true, min: 0 },
@@ -37,7 +46,7 @@ const LighthouseReportSchema = new Schema<ILighthouseReport>(
   { timestamps: true }
 );
 
-LighthouseReportSchema.index({ route: 1, team: 1, createdAt: -1 });
+LighthouseReportSchema.index({ route: 1, team: 1, platform: 1, createdAt: -1 });
 
 export const LighthouseReport: Model<ILighthouseReport> =
   mongoose.models.LighthouseReport ??
@@ -47,6 +56,7 @@ export interface LighthouseReportResponse {
   _id: string;
   route: string;
   team: string;
+  platform: ReportPlatform;
   performance: number;
   lcp: number;
   inp: number;
@@ -68,6 +78,7 @@ export function toReportResponse(doc: ReportSource): LighthouseReportResponse {
     _id: doc._id.toString(),
     route: doc.route,
     team: doc.team,
+    platform: doc.platform ?? "desktop",
     performance: doc.performance,
     lcp: doc.lcp,
     inp: doc.inp,
