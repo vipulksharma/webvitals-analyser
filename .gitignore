@@ -42,3 +42,4 @@ next-env.d.ts
 # lighthouse collection output / local route config
 scripts/reports.json
 scripts/routes.json
+scripts/alert-routes.tmp.json

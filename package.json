@@ -8,17 +8,20 @@
     "start": "next start",
     "lint": "next lint",
     "submit-reports": "bash scripts/submit-reports.sh",
-    "collect-webvitals": "node scripts/collect-webvitals.mjs scripts/routes.json"
+    "collect-webvitals": "node scripts/collect-webvitals.mjs scripts/routes.json",
+    "check-alerts": "node scripts/check-alerts.mjs"
   },
   "dependencies": {
     "mongoose": "^8.9.5",
     "next": "^15.1.6",
+    "nodemailer": "^6.10.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "recharts": "^2.15.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.7",
+    "@types/nodemailer": "^6.4.24",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
     "chrome-launcher": "^1.2.1",
